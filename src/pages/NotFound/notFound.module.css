@@ -1,0 +1,33 @@
+.notFoundContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+}
+
+.notFoundTitle {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.notFoundDescription {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.notFoundLink {
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #00bc77;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.notFoundLink:hover {
+  background-color: #3e8e41;
+}
