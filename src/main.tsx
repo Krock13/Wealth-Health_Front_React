@@ -22,7 +22,6 @@ import { Home } from './pages/Home/Home';
 import { NotFound } from './pages/NotFound/NotFound';
 
 import { Header } from './components/Header/Header';
-import { Footer } from './components/Footer/Footer';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -33,8 +32,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path='/' element={<Home />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
-
-        <Footer />
       </Router>
     </Provider>
   </StrictMode>

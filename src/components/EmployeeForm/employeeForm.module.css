@@ -1,0 +1,64 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: auto;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.formTitle {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-gap: 10px;
+  margin-bottom: 20px;
+  align-items: baseline;
+}
+
+.formLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.formInput,
+.formSelect {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  background-color: #f6f6f6;
+  margin-bottom: 20px;
+}
+
+.legend {
+  padding: 5px;
+}
+
+.submitButton {
+  padding: 10px 50px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.submitButton:hover {
+  background-color: #0056b3;
+}
