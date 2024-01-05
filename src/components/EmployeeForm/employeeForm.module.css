@@ -62,3 +62,8 @@
 .submitButton:hover {
   background-color: #0056b3;
 }
+
+.error {
+  color: crimson;
+  grid-column: 2;
+}
