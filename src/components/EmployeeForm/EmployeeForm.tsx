@@ -2,34 +2,9 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addEmployee } from '../../redux/slices/employeeSlice';
 import { states } from './states';
+import { validateFormFields, FormErrors } from './formValidation';
 
 import styles from './EmployeeForm.module.css';
-
-function isValidName(name: string): boolean {
-  return /^[a-zA-Z ]+$/.test(name); // Regex pour les noms (lettres et espaces uniquement)
-}
-
-function isValidDate(date: string): boolean {
-  return /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(date);
-}
-
-function isValidStreet(street: string): boolean {
-  return /^[a-zA-Z0-9\s,.'-]{3,}$/.test(street);
-}
-
-function isValidZipCode(zipCode: string): boolean {
-  return /^\d{5}$/.test(zipCode); // 5 chiffres pour les Etats-Unis
-}
-
-type FormErrors = {
-  firstName?: string;
-  lastName?: string;
-  dateOfBirth?: string;
-  startDate?: string;
-  street?: string;
-  city?: string;
-  zipCode?: string;
-};
 
 export function EmployeeForm() {
   const dispatch = useDispatch();
@@ -55,39 +30,11 @@ export function EmployeeForm() {
       [name]: value,
     }));
 
-    // Validation
-    let error = '';
-    switch (name) {
-      case 'firstName':
-      case 'lastName':
-      case 'city':
-        if (!isValidName(value)) {
-          error = 'Please use letters and spaces only.';
-        }
-        break;
-      case 'dateOfBirth':
-      case 'startDate':
-        if (!isValidDate(value)) {
-          error =
-            'Please enter a valid date in YYYY-MM-DD format. Month should be 01-12 and day should be 01-31.';
-        }
-        break;
-      case 'street':
-        if (!isValidStreet(value)) {
-          error =
-            "Please use a valid address format. Only letters, numbers, periods (.), apostrophes ('), commas (,), and hyphens (-) are allowed.";
-        }
-        break;
-      case 'zipCode':
-        if (!isValidZipCode(value)) {
-          error = 'Zip code should be 5 digits long.';
-        }
-        break;
-    }
-
+    // Appelle la fonction de validation et met à jour les erreurs
+    const newErrors = validateFormFields(name, value);
     setErrors((prevState) => ({
       ...prevState,
-      [name]: error,
+      ...newErrors,
     }));
   };
 
