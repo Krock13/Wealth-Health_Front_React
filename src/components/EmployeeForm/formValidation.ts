@@ -3,7 +3,7 @@ function isValidName(name: string): boolean {
 }
 
 function isValidDate(date: string): boolean {
-  return /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(date);
+  return /^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])-\d{4}$/.test(date);
 }
 
 function isValidStreet(street: string): boolean {
@@ -38,7 +38,7 @@ export function validateFormFields(name: string, value: string): FormErrors {
     case 'startDate':
       if (!isValidDate(value)) {
         error =
-          'Please enter a valid date in YYYY-MM-DD format. Month should be 01-12 and day should be 01-31.';
+          'Please enter a valid date in MM-DD-YYYY format. Month should be 01-12 and day should be 01-31.';
       }
       break;
     case 'street':
