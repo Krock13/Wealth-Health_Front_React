@@ -19,17 +19,16 @@ import './utils/style/globalStyle.css';
 
 // Page and component imports
 import { Home } from './pages/Home/Home';
+import { EmployeeList } from './pages/EmployeeList/EmployeeList';
 import { NotFound } from './pages/NotFound/NotFound';
-
-import { Header } from './components/Header/Header';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <Router>
-        <Header />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/current-employees' element={<EmployeeList />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Router>

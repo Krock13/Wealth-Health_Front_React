@@ -1,23 +1,49 @@
-import React, { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addEmployee } from '../../redux/slices/employeeSlice';
 import { states } from './states';
 
 import styles from './EmployeeForm.module.css';
 
 export function EmployeeForm() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState(states[0].abbreviation);
-  const [zipCode, setZipCode] = useState('');
+  const dispatch = useDispatch();
+  const [employee, setEmployee] = useState({
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
+    startDate: '',
+    street: '',
+    city: '',
+    state: states[0].abbreviation,
+    zipCode: '',
+    department: 'Sales', // L'initialisation du département par défaut
+  });
   const departments = ['Sales', 'Marketing', 'Engineering', 'Human Resources', 'Legal'];
-  const [department, setDepartment] = useState(departments[0]);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setEmployee((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Ici, tu traiterais la soumission du formulaire
+    dispatch(addEmployee(employee));
+
+    // Réinitialise l'objet employee après la soumission
+    setEmployee({
+      firstName: '',
+      lastName: '',
+      dateOfBirth: '',
+      startDate: '',
+      street: '',
+      city: '',
+      state: states[0].abbreviation,
+      zipCode: '',
+      department: 'Sales',
+    });
   };
 
   return (
@@ -26,37 +52,41 @@ export function EmployeeForm() {
       <div className={styles.formRow}>
         <label className={styles.formLabel}>First Name</label>
         <input
+          name='firstName'
+          value={employee.firstName}
           className={styles.formInput}
           type='text'
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          onChange={handleChange}
         />
       </div>
       <div className={styles.formRow}>
         <label className={styles.formLabel}>Last Name</label>
         <input
+          name='lastName'
           className={styles.formInput}
           type='text'
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
+          value={employee.lastName}
+          onChange={handleChange}
         />
       </div>
       <div className={styles.formRow}>
         <label className={styles.formLabel}>Date of Birth</label>
         <input
+          name='dateOfBirth'
           className={styles.formInput}
           type='text'
-          value={dateOfBirth}
-          onChange={(e) => setDateOfBirth(e.target.value)}
+          value={employee.dateOfBirth}
+          onChange={handleChange}
         />
       </div>
       <div className={styles.formRow}>
         <label className={styles.formLabel}>Start Date</label>
         <input
+          name='startDate'
           className={styles.formInput}
           type='text'
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
+          value={employee.startDate}
+          onChange={handleChange}
         />
       </div>
       <fieldset className={styles.fieldset}>
@@ -64,27 +94,30 @@ export function EmployeeForm() {
         <div className={styles.formRow}>
           <label className={styles.formLabel}>Street</label>
           <input
+            name='street'
             className={styles.formInput}
             type='text'
-            value={street}
-            onChange={(e) => setStreet(e.target.value)}
+            value={employee.street}
+            onChange={handleChange}
           />
         </div>
         <div className={styles.formRow}>
           <label className={styles.formLabel}>City</label>
           <input
+            name='city'
             className={styles.formInput}
             type='text'
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
+            value={employee.city}
+            onChange={handleChange}
           />
         </div>
         <div className={styles.formRow}>
           <label className={styles.formLabel}>State</label>
           <select
+            name='state'
             className={styles.formSelect}
-            value={state}
-            onChange={(e) => setState(e.target.value)}
+            value={employee.state}
+            onChange={handleChange}
           >
             {states.map((state) => (
               <option key={state.abbreviation} value={state.abbreviation}>
@@ -96,19 +129,21 @@ export function EmployeeForm() {
         <div className={styles.formRow}>
           <label className={styles.formLabel}>Zip Code</label>
           <input
+            name='zipCode'
             className={styles.formInput}
             type='text'
-            value={zipCode}
-            onChange={(e) => setZipCode(e.target.value)}
+            value={employee.zipCode}
+            onChange={handleChange}
           />
         </div>
       </fieldset>
       <div className={styles.formRow}>
         <label className={styles.formLabel}>Department</label>
         <select
+          name='department'
           className={styles.formSelect}
-          value={department}
-          onChange={(e) => setDepartment(e.target.value)}
+          value={employee.department}
+          onChange={handleChange}
         >
           {departments.map((dept, index) => (
             <option key={index} value={dept}>

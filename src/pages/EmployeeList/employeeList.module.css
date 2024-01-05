@@ -1,0 +1,21 @@
+.employeeList {
+  max-width: 1024px;
+  margin: auto;
+}
+
+.tableContainer {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.employeeTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employeeTable th,
+.employeeTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
