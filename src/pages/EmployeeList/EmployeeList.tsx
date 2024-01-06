@@ -1,7 +1,18 @@
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './employeeList.module.css';
 
+import { RootState } from '../../redux/store';
+
 export function EmployeeList() {
+  const employeeList = useSelector((state: RootState) => state.employee.employeeList);
+
+  useEffect(() => {
+    // Affiche la liste des employés dans la console
+    console.log('Employee List:', employeeList);
+  }, [employeeList]);
+
   return (
     <main className={styles.employeeList}>
       <h1>Current Employees</h1>

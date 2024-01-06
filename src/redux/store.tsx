@@ -16,3 +16,6 @@ export const store = configureStore({
     employee: employeeReducer,
   },
 });
+
+// Définis le type RootState en fonction de la structure du store
+export type RootState = ReturnType<typeof store.getState>;
