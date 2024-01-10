@@ -4,10 +4,11 @@ import { addEmployee } from '../../redux/slices/employeeSlice';
 import { states } from './states';
 import { validateFormFields, FormErrors } from './formValidation';
 import Modal from '../Modal/Modal';
-
+import { DatePicker } from '../DatePicker/DatePicker';
 import styles from './EmployeeForm.module.css';
 
 export function EmployeeForm() {
+  // Initialisation des états et dispatch
   const dispatch = useDispatch();
   const [employee, setEmployee] = useState({
     firstName: '',
@@ -22,9 +23,48 @@ export function EmployeeForm() {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDOBPickerOpen, setDOBPickerOpen] = useState(false);
+  const [isStartDatePickerOpen, setStartDatePickerOpen] = useState(false);
+  const [globalError, setGlobalError] = useState('');
 
-  const departments = ['Sales', 'Marketing', 'Engineering', 'Human Resources', 'Legal'];
+  // Fonctions de gestion des états
+  const toggleDOBPicker = () => setDOBPickerOpen(!isDOBPickerOpen);
+  const toggleStartDatePicker = () => setStartDatePickerOpen(!isStartDatePickerOpen);
+  const closeModal = () => setIsModalOpen(false);
 
+  // Gestion de la soumission du formulaire
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const isFormEmpty = Object.values(employee).some((value) => value === '');
+    const hasErrors = Object.values(errors).some((error) => error);
+
+    if (isFormEmpty || hasErrors) {
+      const errorMessage = isFormEmpty
+        ? 'Please fill in all required fields.'
+        : 'Please correct the errors before submitting.';
+      setGlobalError(errorMessage);
+      setIsModalOpen(true);
+    } else if (!hasErrors) {
+      dispatch(addEmployee(employee));
+      setIsModalOpen(true);
+      setEmployee({
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        startDate: '',
+        street: '',
+        city: '',
+        state: states[0].abbreviation,
+        zipCode: '',
+        department: 'Sales',
+      });
+      setErrors({});
+    } else {
+      setGlobalError('Please correct the errors before submitting.');
+    }
+  };
+
+  // Gestion des changements dans les inputs
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setEmployee((prevState) => ({
@@ -40,34 +80,25 @@ export function EmployeeForm() {
     }));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const hasErrors = Object.values(errors).some((error) => error);
-    if (!hasErrors) {
-      dispatch(addEmployee(employee));
-      setIsModalOpen(true);
-      // Réinitialise l'objet employee après la soumission
-      setEmployee({
-        firstName: '',
-        lastName: '',
-        dateOfBirth: '',
-        startDate: '',
-        street: '',
-        city: '',
-        state: states[0].abbreviation,
-        zipCode: '',
-        department: 'Sales',
-      });
-      setErrors({});
-    } else {
-      // Afficher un message d'erreur global ou empêcher la soumission
-    }
+  // Gestion des changements de date
+  const handleDateChange = (newDate: Date, fieldName: 'dateOfBirth' | 'startDate') => {
+    // Extrait le jour, le mois et l'année
+    const day = newDate.getDate().toString().padStart(2, '0');
+    const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = newDate.getFullYear();
+
+    // Formatte la date en MM-DD-YYYY
+    const formattedDate = `${month}-${day}-${year}`;
+
+    // Met à jour l'état employee avec la date formatée pour l'affichage
+    setEmployee((prevState) => ({
+      ...prevState,
+      [fieldName]: formattedDate,
+    }));
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    // Réinitialise également le formulaire ici si nécessaire
-  };
+  // Options pour les départements
+  const departments = ['Sales', 'Marketing', 'Engineering', 'Human Resources', 'Legal'];
 
   return (
     <>
@@ -101,9 +132,17 @@ export function EmployeeForm() {
             name='dateOfBirth'
             className={styles.formInput}
             type='text'
+            onFocus={toggleDOBPicker}
             value={employee.dateOfBirth}
             onChange={handleChange}
           />
+          {isDOBPickerOpen && (
+            <DatePicker
+              selectedDate={employee.dateOfBirth ? new Date(employee.dateOfBirth) : new Date()}
+              onDateChange={(newDate) => handleDateChange(newDate, 'dateOfBirth')}
+              closeDatePicker={() => setDOBPickerOpen(false)}
+            />
+          )}
           {errors.dateOfBirth && <span className={styles.error}>{errors.dateOfBirth}</span>}
         </div>
         <div className={styles.formRow}>
@@ -112,9 +151,17 @@ export function EmployeeForm() {
             name='startDate'
             className={styles.formInput}
             type='text'
+            onFocus={toggleStartDatePicker}
             value={employee.startDate}
             onChange={handleChange}
           />
+          {isStartDatePickerOpen && (
+            <DatePicker
+              selectedDate={employee.startDate ? new Date(employee.startDate) : new Date()}
+              onDateChange={(newDate) => handleDateChange(newDate, 'startDate')}
+              closeDatePicker={() => setStartDatePickerOpen(false)}
+            />
+          )}
           {errors.startDate && <span className={styles.error}>{errors.startDate}</span>}
         </div>
         <fieldset className={styles.fieldset}>
@@ -189,7 +236,10 @@ export function EmployeeForm() {
           </button>
         </div>
       </form>
-      {isModalOpen && <Modal onClose={closeModal}>Employee added successfully!</Modal>}
+      {globalError && <div className='error-message'>{globalError}</div>}
+      {isModalOpen && (
+        <Modal onClose={closeModal}>{globalError || 'Employee added successfully!'}</Modal>
+      )}
     </>
   );
 }

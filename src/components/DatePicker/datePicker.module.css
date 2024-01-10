@@ -1,0 +1,71 @@
+.datePicker {
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f7f7f7;
+  padding: 10px 20px;
+}
+
+.calendar {
+  padding: 10px;
+}
+
+.day {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 4px;
+}
+
+.day.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.day:hover {
+  background-color: #ffc400;
+}
+
+.day.today:not(.selected) {
+  background-color: white;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.day.today:not(.selected):hover {
+  background-color: #ffc400;
+}
+
+.daysContainer {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.weekDaysContainer {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  color: #495057;
+  background-color: #e9ecef;
+  padding: 5px 0;
+}
+
+.weekDay {
+  padding: 5px;
+  text-align: center;
+  background-color: #e9ecef;
+}
