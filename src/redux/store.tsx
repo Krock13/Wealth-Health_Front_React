@@ -17,5 +17,5 @@ export const store = configureStore({
   },
 });
 
-// Définis le type RootState en fonction de la structure du store
+// Defines the RootState type according to the store structure
 export type RootState = ReturnType<typeof store.getState>;

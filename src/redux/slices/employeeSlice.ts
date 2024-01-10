@@ -1,10 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Définition de l'état initial et de l'interface pour les employés
+/**
+ * Interface for the state of the employee slice.
+ */
 interface EmployeeState {
-  employeeList: Employee[];
+  employeeList: Employee[]; // Array to store the list of employees.
 }
 
+/**
+ * Interface to describe the shape of an Employee object.
+ */
 interface Employee {
   firstName: string;
   lastName: string;
@@ -17,21 +22,30 @@ interface Employee {
   zipCode: string;
 }
 
+/**
+ * The initial state of the employee slice.
+ */
 const initialState: EmployeeState = {
-  employeeList: [],
+  employeeList: [], // Starts with an empty employee list.
 };
 
+/**
+ * Redux slice to manage employee-related state.
+ */
 export const employeeSlice = createSlice({
-  name: 'employee',
+  name: 'employee', // Name of the slice.
   initialState,
   reducers: {
-    // Action pour ajouter un employé
+    /**
+     * Reducer to add a new employee to the employee list.
+     * @param {EmployeeState} state The current state of the slice.
+     * @param {PayloadAction<Employee>} action The action with the payload to add.
+     */
     addEmployee: (state, action: PayloadAction<Employee>) => {
-      state.employeeList.push(action.payload);
+      state.employeeList.push(action.payload); // Adds the new employee to the list.
     },
   },
 });
 
-// Export des actions et du reducer
-export const { addEmployee } = employeeSlice.actions;
-export default employeeSlice.reducer;
+export const { addEmployee } = employeeSlice.actions; // Exports the actions.
+export default employeeSlice.reducer; // Exports the reducer.

@@ -1,3 +1,12 @@
+/**
+ * EmployeeForm Component
+ *
+ * This component renders a form for creating a new employee.
+ * It includes input fields for employee details such as name,date of birth, address, etc.
+ * The form also integrates a DatePicker component for selecting dates and handles form validation,
+ * state management, and submission.
+ */
+
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addEmployee } from '../../redux/slices/employeeSlice';
@@ -8,8 +17,9 @@ import { DatePicker } from '../DatePicker/DatePicker';
 import styles from './EmployeeForm.module.css';
 
 export function EmployeeForm() {
-  // Initialisation des états et dispatch
   const dispatch = useDispatch();
+
+  // State management for form fields, errors, modals, and date pickers.
   const [employee, setEmployee] = useState({
     firstName: '',
     lastName: '',
@@ -19,20 +29,25 @@ export function EmployeeForm() {
     city: '',
     state: states[0].abbreviation,
     zipCode: '',
-    department: 'Sales', // L'initialisation du département par défaut
+    department: 'Sales',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDOBPickerOpen, setDOBPickerOpen] = useState(false);
   const [isStartDatePickerOpen, setStartDatePickerOpen] = useState(false);
-  const [globalError, setGlobalError] = useState('');
+  const [globalError, setGlobalError] = useState<string | null>(null);
 
-  // Fonctions de gestion des états
+  // Toggle functions for date pickers.
   const toggleDOBPicker = () => setDOBPickerOpen(!isDOBPickerOpen);
   const toggleStartDatePicker = () => setStartDatePickerOpen(!isStartDatePickerOpen);
+
+  // Function to close modal.
   const closeModal = () => setIsModalOpen(false);
 
-  // Gestion de la soumission du formulaire
+  /**
+   * Handles form submission.
+   * Validates form data, displays error messages if necessary, or dispatches form data to the redux store.
+   */
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const isFormEmpty = Object.values(employee).some((value) => value === '');
@@ -59,12 +74,16 @@ export function EmployeeForm() {
         department: 'Sales',
       });
       setErrors({});
+      setGlobalError(null);
     } else {
       setGlobalError('Please correct the errors before submitting.');
     }
   };
 
-  // Gestion des changements dans les inputs
+  /**
+   * Handles changes in form input fields.
+   * Updates the employee state and validates form fields.
+   */
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setEmployee((prevState) => ({
@@ -72,7 +91,6 @@ export function EmployeeForm() {
       [name]: value,
     }));
 
-    // Appelle la fonction de validation et met à jour les erreurs
     const newErrors = validateFormFields(name, value);
     setErrors((prevState) => ({
       ...prevState,
@@ -80,26 +98,26 @@ export function EmployeeForm() {
     }));
   };
 
-  // Gestion des changements de date
+  /**
+   * Handles date changes from the DatePicker.
+   * Formats the selected date and updates the employee state.
+   */
   const handleDateChange = (newDate: Date, fieldName: 'dateOfBirth' | 'startDate') => {
-    // Extrait le jour, le mois et l'année
     const day = newDate.getDate().toString().padStart(2, '0');
     const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
     const year = newDate.getFullYear();
 
-    // Formatte la date en MM-DD-YYYY
     const formattedDate = `${month}-${day}-${year}`;
 
-    // Met à jour l'état employee avec la date formatée pour l'affichage
     setEmployee((prevState) => ({
       ...prevState,
       [fieldName]: formattedDate,
     }));
   };
 
-  // Options pour les départements
   const departments = ['Sales', 'Marketing', 'Engineering', 'Human Resources', 'Legal'];
 
+  // Render the form and associated components.
   return (
     <>
       <form onSubmit={handleSubmit} className={styles.formContainer}>

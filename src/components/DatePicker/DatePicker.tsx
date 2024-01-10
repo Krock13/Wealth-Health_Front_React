@@ -1,26 +1,30 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styles from './datePicker.module.css';
 
+/**
+ * Properties for the DatePicker component.
+ */
 type DatePickerProps = {
-  selectedDate: Date;
-  onDateChange: (newDate: Date) => void;
-  closeDatePicker: () => void;
+  selectedDate: Date; // The currently selected date.
+  onDateChange: (newDate: Date) => void; // Callback function when a new date is selected.
+  closeDatePicker: () => void; // Function to close the DatePicker.
 };
 
+/**
+ * A DatePicker component allowing users to select a date.
+ */
 export const DatePicker: React.FC<DatePickerProps> = ({
   selectedDate,
   onDateChange,
   closeDatePicker,
 }) => {
   const datePickerRef = useRef<HTMLDivElement>(null);
-  // État pour le mois et l'année actuels
   const [currentMonth, setCurrentMonth] = useState(selectedDate.getMonth());
   const [currentYear, setCurrentYear] = useState(selectedDate.getFullYear());
-
   const [isOpen, setIsOpen] = useState(true);
 
+  // Constants for days of the week and months.
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
   const months = [
     'January',
     'February',
@@ -36,10 +40,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     'December',
   ];
 
-  // Générer une liste d'années pour la sélection
-  const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
+  // Generates a list of years for selection.
+  const years = Array.from({ length: 105 }, (_, i) => currentYear - 100 + i);
 
-  // Gestion du changement de mois
+  // Event handlers for navigating through months.
   const handlePreviousMonth = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setCurrentMonth((prev) => (prev === 0 ? 11 : prev - 1));
@@ -56,7 +60,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     }
   };
 
-  // Fonction pour revenir à la date d'aujourd'hui
+  // Handler for selecting today's date.
   const handleToday = () => {
     const today = new Date();
     setCurrentMonth(today.getMonth());
@@ -64,6 +68,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     onDateChange(today);
   };
 
+  // Helper functions to get days in a month and the first day of the month.
   const getDaysInMonth = (month: number, year: number): number => {
     return new Date(year, month + 1, 0).getDate();
   };
@@ -72,33 +77,28 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     return new Date(year, month, 1).getDay();
   };
 
-  // Fonction appelée lorsqu'une journée est sélectionnée
+  // Handler for selecting a date.
   const selectDate = (day: number) => {
-    // Crée une nouvelle date avec le jour sélectionné
     const newDate = new Date(currentYear, currentMonth, day);
 
-    // Ajuste pour le décalage horaire
     const timezoneOffset = newDate.getTimezoneOffset() * 60000;
     const adjustedDate = new Date(newDate.getTime() - timezoneOffset);
 
-    // Appelle onDateChange avec la date ajustée
     onDateChange(adjustedDate);
     closeDatePicker();
   };
 
-  // Logique pour générer le calendrier
+  // Generates the calendar with days.
   const generateCalendar = () => {
     const daysInMonth = getDaysInMonth(currentMonth, currentYear);
     const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
     const days = [];
     const today = new Date();
 
-    // Ajoute des divs vides si le premier jour du mois n'est pas un dimanche
     for (let i = 0; i < firstDay; i++) {
       days.push(<div key={`empty-${i}`} className={styles.day} />);
     }
 
-    // Ajoute les jours du mois
     for (let day = 1; day <= daysInMonth; day++) {
       const isToday =
         today.getDate() === day &&
@@ -125,7 +125,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     return <div className={styles.daysContainer}>{days}</div>;
   };
 
-  // Fonction pour fermer le DatePicker si le clic est en dehors de celui-ci
+  // Handles closing the DatePicker when clicking outside.
   const handleCloseOnOutsideClick = useCallback(
     (event: MouseEvent) => {
       if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
@@ -136,18 +136,19 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     [closeDatePicker]
   );
 
+  // Effect for managing the outside click listener.
   useEffect(() => {
-    // Ajoute l'EventListener lorsque le DatePicker est ouvert
     window.addEventListener('mousedown', handleCloseOnOutsideClick);
 
-    // Nettoie l'EventListener
     return () => {
       window.removeEventListener('mousedown', handleCloseOnOutsideClick);
     };
   }, [handleCloseOnOutsideClick]);
 
+  // Return null to render nothing if the DatePicker is not open.
   if (!isOpen) return null;
 
+  // Main rendering of the DatePicker component.
   return (
     <div ref={datePickerRef} className={styles.datePicker}>
       <div className={styles.header}>

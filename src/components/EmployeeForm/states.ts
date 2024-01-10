@@ -1,9 +1,15 @@
-// states.ts
+/**
+ * Represents a U.S. state with its full name and abbreviation.
+ */
 export interface State {
-  name: string;
-  abbreviation: string;
+  name: string; // The full name of the state.
+  abbreviation: string; // The official two-letter abbreviation.
 }
 
+/**
+ * An array of U.S. states, each with its full name and abbreviation.
+ * This list can be used for form selections, data validation, etc.
+ */
 export const states: State[] = [
   { name: 'Alabama', abbreviation: 'AL' },
   { name: 'Alaska', abbreviation: 'AK' },
