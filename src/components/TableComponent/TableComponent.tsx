@@ -26,6 +26,23 @@ export const TableComponent = <T extends Record<string, unknown>>({
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   /**
+   * Resets the current page to the first page.
+   */
+  const resetToFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  /**
+   * Handles the search input change event and resets to the first page.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e The event object.
+   */
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    resetToFirstPage();
+  };
+
+  /**
    * Sorts the data based on the sorted column and direction.
    *
    * @param {T[]} data The data array to sort.
@@ -92,7 +109,9 @@ export const TableComponent = <T extends Record<string, unknown>>({
    * @param {number} pageNumber The new page number.
    */
   const goToPage = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
+    if (pageNumber >= 1 && pageNumber <= lastPage) {
+      setCurrentPage(pageNumber);
+    }
   };
 
   /**
@@ -129,12 +148,7 @@ export const TableComponent = <T extends Record<string, unknown>>({
         </div>
         <div className={styles.tableSearchControl}>
           <p>Search : </p>
-          <input
-            type='text'
-            placeholder='Search...'
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <input type='text' placeholder='Search...' value={search} onChange={handleSearch} />
         </div>
       </div>
       <table className={styles.table}>
@@ -173,7 +187,7 @@ export const TableComponent = <T extends Record<string, unknown>>({
           <input
             type='number'
             value={currentPage}
-            onChange={(e) => goToPage(Number(e.target.value))}
+            onChange={(e) => goToPage(Math.max(1, Math.min(lastPage, Number(e.target.value))))}
             min={1}
             max={lastPage}
           />
