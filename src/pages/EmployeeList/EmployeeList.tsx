@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import TableComponent from '../../components/TableComponent/TableComponent';
+import TableComponent from 'react-typescript-table';
 import placeholderData from './placeholderData.json';
 import styles from './employeeList.module.css';
 
