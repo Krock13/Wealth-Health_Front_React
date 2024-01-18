@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import styles from './datePicker.module.css';
 
 /**
- * Properties for the DatePicker component.
+ * Type definition for the properties of the DatePicker component.
  */
 type DatePickerProps = {
   selectedDate: Date; // The currently selected date.
@@ -12,18 +12,22 @@ type DatePickerProps = {
 
 /**
  * A DatePicker component allowing users to select a date.
+ *
+ * @param {DatePickerProps} props The properties passed to the DatePicker component.
+ * @returns {React.FC<DatePickerProps>} The DatePicker component.
  */
 export const DatePicker: React.FC<DatePickerProps> = ({
   selectedDate,
   onDateChange,
   closeDatePicker,
 }) => {
+  // State and ref hooks for managing date picker state and interactions
   const datePickerRef = useRef<HTMLDivElement>(null);
   const [currentMonth, setCurrentMonth] = useState(selectedDate.getMonth());
   const [currentYear, setCurrentYear] = useState(selectedDate.getFullYear());
   const [isOpen, setIsOpen] = useState(true);
 
-  // Constants for days of the week and months.
+  // Definitions for days of the week and months
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [
     'January',
@@ -40,10 +44,14 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     'December',
   ];
 
-  // Generates a list of years for selection.
+  // Generates a list of years for the dropdown selection
   const years = Array.from({ length: 105 }, (_, i) => currentYear - 100 + i);
 
-  // Event handlers for navigating through months.
+  /**
+   * Handles the navigation to the previous month.
+   *
+   * @param {React.MouseEvent<HTMLButtonElement>} event The mouse event.
+   */
   const handlePreviousMonth = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setCurrentMonth((prev) => (prev === 0 ? 11 : prev - 1));
@@ -88,7 +96,11 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     closeDatePicker();
   };
 
-  // Generates the calendar with days.
+  /**
+   * Generates the calendar view with days.
+   *
+   * @returns {JSX.Element} The calendar view with days.
+   */
   const generateCalendar = () => {
     const daysInMonth = getDaysInMonth(currentMonth, currentYear);
     const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
