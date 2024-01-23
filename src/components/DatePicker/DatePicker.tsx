@@ -162,17 +162,18 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   // Main rendering of the DatePicker component.
   return (
-    <div ref={datePickerRef} className={styles.datePicker}>
+    <div ref={datePickerRef} className={styles.datePicker} role='dialog' aria-modal='true'>
       <div className={styles.header}>
-        <button type='button' onClick={handlePreviousMonth}>
+        <button type='button' onClick={handlePreviousMonth} aria-label='Previous Month'>
           &lt;
         </button>
-        <button type='button' onClick={handleToday}>
+        <button type='button' onClick={handleToday} aria-label='Select Today'>
           🏠
         </button>
         <select
           value={currentMonth}
           onChange={(e) => setCurrentMonth(parseInt(e.target.value, 10))}
+          aria-label='Select Month'
         >
           {months.map((month, index) => (
             <option key={month} value={index}>
@@ -180,14 +181,18 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             </option>
           ))}
         </select>
-        <select value={currentYear} onChange={(e) => setCurrentYear(parseInt(e.target.value, 10))}>
+        <select
+          value={currentYear}
+          onChange={(e) => setCurrentYear(parseInt(e.target.value, 10))}
+          aria-label='Select Year'
+        >
           {years.map((year) => (
             <option key={year} value={year}>
               {year}
             </option>
           ))}
         </select>
-        <button type='button' onClick={handleNextMonth}>
+        <button type='button' onClick={handleNextMonth} aria-label='Next Month'>
           &gt;
         </button>
       </div>
@@ -198,7 +203,9 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           </div>
         ))}
       </div>
-      <div className={styles.calendar}>{generateCalendar()}</div>
+      <div className={styles.calendar} role='grid'>
+        {generateCalendar()}
+      </div>
     </div>
   );
 };
