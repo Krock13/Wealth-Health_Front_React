@@ -113,6 +113,12 @@ export function EmployeeForm() {
       ...prevState,
       [fieldName]: formattedDate,
     }));
+
+    const newErrors = validateFormFields(fieldName, formattedDate);
+    setErrors((prevState) => ({
+      ...prevState,
+      ...newErrors,
+    }));
   };
 
   const departments = ['Sales', 'Marketing', 'Engineering', 'Human Resources', 'Legal'];
