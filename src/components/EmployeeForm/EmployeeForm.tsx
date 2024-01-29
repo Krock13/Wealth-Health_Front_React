@@ -325,7 +325,7 @@ export function EmployeeForm() {
           </button>
         </div>
       </form>
-      {globalError && <div className='error-message'>{globalError}</div>}
+      {globalError && <div className='error-message'></div>}
       {isModalOpen && (
         <Modal onClose={closeModal}>{globalError || 'Employee added successfully!'}</Modal>
       )}
