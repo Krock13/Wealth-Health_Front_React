@@ -64,6 +64,18 @@ The application is organized into several key directories:
 - `pages`: Includes the main pages of the application such as EmployeeList, Home, and NotFound.
 - `redux`: Houses Redux logic, including slices for state management and the store configuration.
 
+## Component Library
+
+The `TableComponent` used in this application is part of a custom-built component library designed for React applications with TypeScript support. It provides a sortable and searchable table that enhances the user experience by efficiently rendering and updating employee data.
+
+To include this component in your project, you can install it from npm:
+
+```bash
+npm install react-typescript-table
+```
+
+For more information and usage instructions, please visit the [react-typescript-table](https://www.npmjs.com/package/react-typescript-table) package on npm.
+
 ## Contributors
 
 This project is part of a development training program and is not open for external contributions.
